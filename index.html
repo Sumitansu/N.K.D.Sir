@@ -118,14 +118,41 @@
                 <select id="class">
                     <option value="1">Class 1</option>
                     <option value="2">Class 2</option>
+                    <option value="3">Class 3</option>
+                    <option value="4">Class 4</option>
+                    <option value="5">Class 5</option>
+                    <option value="6">Class 6</option>
+                    <option value="7">Class 7</option>
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
                     <!-- Add options for Class 3 to 12 -->
                 </select>
                 <label for="subject">Select Subject:</label>
                 <select id="subject">
+                    <option value="1">Science</option>
+                    <option value="2">Physics</option>
+                    <option value="3">Chemistry</option>
+                    <option value="4">Biology</option>
+                    <option value="5">Maths</option>
                     <!-- Options for subjects based on class selection will be added dynamically -->
                 </select>
                 <label for="chapter">Select Chapter:</label>
                 <select id="chapter">
+                    <option value="1">Subject 1</option>
+                    <option value="2">Subject 2</option>
+                    <option value="3">Subject 3</option>
+                    <option value="4">Subject 4</option>
+                    <option value="5">Subject 5</option>
+                    <option value="6">Subject 6</option>
+                    <option value="7">Subject 7</option>
+                    <option value="8">Subject 8</option>
+                    <option value="9">Subject 9</option>
+                    <option value="10">Subject 10</option>
+                    <option value="11">Subject 11</option>
+                    <option value="12">Subject 12</option>
                     <!-- Options for chapters based on subject selection will be added dynamically -->
                 </select>
                 <button type="button" id="upload-button">Upload</button>
@@ -148,16 +175,43 @@
                     <option value="all">All</option>
                     <option value="1">Class 1</option>
                     <option value="2">Class 2</option>
+                    <option value="3">Class 3</option>
+                    <option value="4">Class 4</option>
+                    <option value="5">Class 5</option>
+                    <option value="6">Class 6</option>
+                    <option value="7">Class 7</option>
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
                     <!-- Add options for Class 3 to 12 -->
                 </select>
                 <label for="filter-subject">Filter by Subject:</label>
                 <select id="filter-subject">
                     <option value="all">All</option>
+                    <option value="1">Science</option>
+                    <option value="2">Physics</option>
+                    <option value="3">Chemistry</option>
+                    <option value="4">Biology</option>
+                    <option value="5">Maths</option>
                     <!-- Options for subjects will be added dynamically -->
                 </select>
                 <label for="filter-chapter">Filter by Chapter:</label>
                 <select id="filter-chapter">
                     <option value="all">All</option>
+                    <option value="1">Subject 1</option>
+                    <option value="2">Subject 2</option>
+                    <option value="3">Subject 3</option>
+                    <option value="4">Subject 4</option>
+                    <option value="5">Subject 5</option>
+                    <option value="6">Subject 6</option>
+                    <option value="7">Subject 7</option>
+                    <option value="8">Subject 8</option>
+                    <option value="9">Subject 9</option>
+                    <option value="10">Subject 10</option>
+                    <option value="11">Subject 11</option>
+                    <option value="12">Subject 12</option>
                     <!-- Options for chapters will be added dynamically -->
                 </select>
             </div>
@@ -273,62 +327,7 @@
         localStorage.setItem("files", JSON.stringify(files)); // Save files to localStorage
         displayFiles(files);
         alert("File uploaded successfully!");
-
-        // Create a temporary link for the uploaded file
-        const fileURL = URL.createObjectURL(file);
-        newFile.url = fileURL; // Add the URL to the file object
-        localStorage.setItem(fileName, fileURL); // Save the URL in local storage
     });
-
-    // Function to display files
-    function displayFiles(filesToShow) {
-        fileContainer.innerHTML = ""; // Clear previous files
-        deleteContentList.innerHTML = ""; // Clear previous delete content list
-        filesToShow.forEach((file, index) => {
-            const fileElement = document.createElement("div");
-            fileElement.classList.add("file");
-            fileElement.textContent = file.name;
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Delete";
-            deleteButton.addEventListener("click", function() {
-                // Delete file from files array
-               filesToShow.splice(index, 1);
-               // Remove URL from local storage
-               localStorage.removeItem(file.name);
-               // Update localStorage
-               localStorage.setItem("files", JSON.stringify(filesToShow));
-               // Re-display files
-               displayFiles(filesToShow);
-           });
-           const downloadButton = document.createElement("button");
-           downloadButton.textContent = "Download";
-           downloadButton.addEventListener("click", function() {
-               // Create a temporary link to download the file
-               const a = document.createElement("a");
-               a.href = file.url; // Use the saved URL
-               a.download = file.name;
-               a.click();
-           });
-           fileElement.appendChild(downloadButton);
-           fileContainer.appendChild(fileElement);
-           // Add file to delete content list
-           const deleteContentItem = document.createElement("div");
-           deleteContentItem.textContent = file.name;
-           const deleteButtonClone = deleteButton.cloneNode(true);
-           deleteButtonClone.addEventListener("click", function() {
-               // Delete file from files array
-                filesToShow.splice(index, 1);
-                // Remove URL from local storage
-               localStorage.removeItem(file.name);
-                // Update localStorage
-                localStorage.setItem("files", JSON.stringify(filesToShow));
-                // Re-display files
-                displayFiles(filesToShow);
-            });
-            deleteContentItem.appendChild(deleteButtonClone); // Clone delete button
-            deleteContentList.appendChild(deleteContentItem);
-        });
-    }
 
     // Event listener for class select change
     classSelect.addEventListener("change", function() {
