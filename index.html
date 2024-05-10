@@ -273,7 +273,62 @@
         localStorage.setItem("files", JSON.stringify(files)); // Save files to localStorage
         displayFiles(files);
         alert("File uploaded successfully!");
+
+        // Create a temporary link for the uploaded file
+        const fileURL = URL.createObjectURL(file);
+        newFile.url = fileURL; // Add the URL to the file object
+        localStorage.setItem(fileName, fileURL); // Save the URL in local storage
     });
+
+    // Function to display files
+    function displayFiles(filesToShow) {
+        fileContainer.innerHTML = ""; // Clear previous files
+        deleteContentList.innerHTML = ""; // Clear previous delete content list
+        filesToShow.forEach((file, index) => {
+            const fileElement = document.createElement("div");
+            fileElement.classList.add("file");
+            fileElement.textContent = file.name;
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", function() {
+                // Delete file from files array
+               filesToShow.splice(index, 1);
+               // Remove URL from local storage
+               localStorage.removeItem(file.name);
+               // Update localStorage
+               localStorage.setItem("files", JSON.stringify(filesToShow));
+               // Re-display files
+               displayFiles(filesToShow);
+           });
+           const downloadButton = document.createElement("button");
+           downloadButton.textContent = "Download";
+           downloadButton.addEventListener("click", function() {
+               // Create a temporary link to download the file
+               const a = document.createElement("a");
+               a.href = file.url; // Use the saved URL
+               a.download = file.name;
+               a.click();
+           });
+           fileElement.appendChild(downloadButton);
+           fileContainer.appendChild(fileElement);
+           // Add file to delete content list
+           const deleteContentItem = document.createElement("div");
+           deleteContentItem.textContent = file.name;
+           const deleteButtonClone = deleteButton.cloneNode(true);
+           deleteButtonClone.addEventListener("click", function() {
+               // Delete file from files array
+                filesToShow.splice(index, 1);
+                // Remove URL from local storage
+               localStorage.removeItem(file.name);
+                // Update localStorage
+                localStorage.setItem("files", JSON.stringify(filesToShow));
+                // Re-display files
+                displayFiles(filesToShow);
+            });
+            deleteContentItem.appendChild(deleteButtonClone); // Clone delete button
+            deleteContentList.appendChild(deleteContentItem);
+        });
+    }
 
     // Event listener for class select change
     classSelect.addEventListener("change", function() {
