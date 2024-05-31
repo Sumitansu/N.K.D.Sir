@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N.K.D. Sir</title>
     <style>
-        /* Add your CSS styles here */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -39,18 +38,12 @@
             background-color: #0056b3;
         }
 
-        input[type="password"] {
-            padding: 10px;
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        select {
+        input[type="password"], input[type="file"], select {
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
             margin-right: 10px;
+            margin-bottom: 10px;
         }
 
         #upload-form {
@@ -70,11 +63,15 @@
             border-radius: 5px;
             width: 200px;
             text-align: center;
-            position: relative; /* Added for positioning delete button */
+            position: relative;
         }
 
         .file button {
             margin-top: 10px;
+        }
+
+        .delete-button {
+            display: none;
         }
 
         footer {
@@ -86,36 +83,25 @@
             bottom: 0;
             width: 100%;
         }
-
-        .delete-content {
-            margin-top: 20px;
-        }
-
-        .delete-content button {
-            margin-right: 10px;
-        }
     </style>
 </head>
 <body>
     <header>
         <h1>N.K.D. Sir's Website</h1>
-        <!-- Admin access button -->
         <button id="admin-button">Admin Control</button>
-        <!-- Admin login area -->
         <div id="admin-login" style="display: none;">
             <input type="password" id="admin-password" placeholder="Enter admin password">
             <button id="login-button">Login</button>
         </div>
     </header>
     <main>
-        <!-- Upload Files section -->
         <section id="upload-section" style="display: none;">
             <h2>Upload Files</h2>
-            <!-- Form for file upload -->
             <form id="upload-form">
                 <input type="file" id="file">
                 <label for="class">Select Class:</label>
                 <select id="class">
+                    <option value="">Select Class</option>
                     <option value="1">Class 1</option>
                     <option value="2">Class 2</option>
                     <option value="3">Class 3</option>
@@ -128,47 +114,20 @@
                     <option value="10">Class 10</option>
                     <option value="11">Class 11</option>
                     <option value="12">Class 12</option>
-                    <!-- Add options for Class 3 to 12 -->
                 </select>
                 <label for="subject">Select Subject:</label>
                 <select id="subject">
-                    <option value="1">Science</option>
-                    <option value="2">Physics</option>
-                    <option value="3">Chemistry</option>
-                    <option value="4">Biology</option>
-                    <option value="5">Maths</option>
-                    <!-- Options for subjects based on class selection will be added dynamically -->
+                    <option value="">Select Subject</option>
                 </select>
                 <label for="chapter">Select Chapter:</label>
                 <select id="chapter">
-                    <option value="1">Subject 1</option>
-                    <option value="2">Subject 2</option>
-                    <option value="3">Subject 3</option>
-                    <option value="4">Subject 4</option>
-                    <option value="5">Subject 5</option>
-                    <option value="6">Subject 6</option>
-                    <option value="7">Subject 7</option>
-                    <option value="8">Subject 8</option>
-                    <option value="9">Subject 9</option>
-                    <option value="10">Subject 10</option>
-                    <option value="11">Subject 11</option>
-                    <option value="12">Subject 12</option>
-                    <!-- Options for chapters based on subject selection will be added dynamically -->
+                    <option value="">Select Chapter</option>
                 </select>
                 <button type="button" id="upload-button">Upload</button>
             </form>
         </section>
-        <!-- Delete Content section -->
-        <section class="delete-content" style="display: none;">
-            <h2>Delete Content</h2>
-            <div id="delete-content-list">
-                <!-- File names and delete buttons will be dynamically added here -->
-            </div>
-        </section>
-        <!-- Available Files section -->
         <section id="files-section">
             <h2>Available Files</h2>
-            <!-- Filter options for students -->
             <div>
                 <label for="filter-class">Filter by Class:</label>
                 <select id="filter-class">
@@ -185,229 +144,214 @@
                     <option value="10">Class 10</option>
                     <option value="11">Class 11</option>
                     <option value="12">Class 12</option>
-                    <!-- Add options for Class 3 to 12 -->
                 </select>
                 <label for="filter-subject">Filter by Subject:</label>
                 <select id="filter-subject">
                     <option value="all">All</option>
-                    <option value="1">Science</option>
-                    <option value="2">Physics</option>
-                    <option value="3">Chemistry</option>
-                    <option value="4">Biology</option>
-                    <option value="5">Maths</option>
-                    <!-- Options for subjects will be added dynamically -->
                 </select>
                 <label for="filter-chapter">Filter by Chapter:</label>
                 <select id="filter-chapter">
                     <option value="all">All</option>
-                    <option value="1">Subject 1</option>
-                    <option value="2">Subject 2</option>
-                    <option value="3">Subject 3</option>
-                    <option value="4">Subject 4</option>
-                    <option value="5">Subject 5</option>
-                    <option value="6">Subject 6</option>
-                    <option value="7">Subject 7</option>
-                    <option value="8">Subject 8</option>
-                    <option value="9">Subject 9</option>
-                    <option value="10">Subject 10</option>
-                    <option value="11">Subject 11</option>
-                    <option value="12">Subject 12</option>
-                    <!-- Options for chapters will be added dynamically -->
                 </select>
             </div>
-            <!-- Content section displaying files -->
-            <div id="file-container">
-                <!-- Files will be dynamically added here -->
-            </div>
+            <div id="file-container"></div>
         </section>
     </main>
     <footer>
         <p>&copy; 2024 File Sharing Website. All rights reserved. By Sumitansu Mohanta (Sumit)</p>
     </footer>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-    const adminButton = document.getElementById("admin-button");
-    const adminLogin = document.getElementById("admin-login");
-    const passwordInput = document.getElementById("admin-password");
-    const uploadSection = document.getElementById("upload-section");
-    const fileContainer = document.getElementById("file-container");
-    const uploadForm = document.getElementById("upload-form");
-    const uploadButton = document.getElementById("upload-button");
-    const fileInput = document.getElementById("file");
-    const classSelect = document.getElementById("class");
-    const subjectSelect = document.getElementById("subject");
-    const chapterSelect = document.getElementById("chapter");
-    const filterClassSelect = document.getElementById("filter-class");
-    const filterSubjectSelect = document.getElementById("filter-subject");
-    const filterChapterSelect = document.getElementById("filter-chapter");
-    const deleteContentList = document.getElementById("delete-content-list");
+            const adminButton = document.getElementById("admin-button");
+            const adminLogin = document.getElementById("admin-login");
+            const passwordInput = document.getElementById("admin-password");
+            const uploadSection = document.getElementById("upload-section");
+            const fileContainer = document.getElementById("file-container");
+            const uploadButton = document.getElementById("upload-button");
+            const fileInput = document.getElementById("file");
+            const classSelect = document.getElementById("class");
+            const subjectSelect = document.getElementById("subject");
+            const chapterSelect = document.getElementById("chapter");
+            const filterClassSelect = document.getElementById("filter-class");
+            const filterSubjectSelect = document.getElementById("filter-subject");
+            const filterChapterSelect = document.getElementById("filter-chapter");
 
-    // Function to display files
-    function displayFiles(filesToShow) {
-        fileContainer.innerHTML = ""; // Clear previous files
-        deleteContentList.innerHTML = ""; // Clear previous delete content list
-        filesToShow.forEach((file, index) => {
-            const fileElement = document.createElement("div");
-            fileElement.classList.add("file");
-            fileElement.textContent = file.name;
-            const deleteButton = document.createElement("button");
-            deleteButton.textContent = "Delete";
-            deleteButton.addEventListener("click", function() {
-                // Delete file from files array
-                filesToShow.splice(index, 1);
-                // Update localStorage
-                localStorage.setItem("files", JSON.stringify(filesToShow));
-                // Re-display files
-                displayFiles(filesToShow);
-            });
-            const downloadButton = document.createElement("button");
-            downloadButton.textContent = "Download";
-            downloadButton.addEventListener("click", function() {
-                // Create a temporary link to download the file
-                const a = document.createElement("a");
-                a.href = URL.createObjectURL(file.blob);
-                a.download = file.name;
-                a.click();
-            });
-            fileElement.appendChild(downloadButton);
-            fileContainer.appendChild(fileElement);
-            // Add file to delete content list
-            const deleteContentItem = document.createElement("div");
-            deleteContentItem.textContent = file.name;
-            const deleteButtonClone = deleteButton.cloneNode(true);
-            deleteButtonClone.addEventListener("click", function() {
-                // Delete file from files array
-                filesToShow.splice(index, 1);
-                // Update localStorage
-                localStorage.setItem("files", JSON.stringify(filesToShow));
-                // Re-display files
-                displayFiles(filesToShow);
-            });
-            deleteContentItem.appendChild(deleteButtonClone); // Clone delete button
-            deleteContentList.appendChild(deleteContentItem);
-        });
-    }
+            let isAdmin = false;
 
-    // Mock data for available files
-    let files = JSON.parse(localStorage.getItem("files")) || [];
+            // Function to display files
+            function displayFiles(filesToShow) {
+                fileContainer.innerHTML = ""; // Clear previous files
+                filesToShow.forEach((file, index) => {
+                    const fileElement = document.createElement("div");
+                    fileElement.classList.add("file");
+                    fileElement.textContent = file.name;
 
-    // Event listener for admin button click
-    adminButton.addEventListener("click", function() {
-        adminLogin.style.display = "block"; // Show admin login area
-    });
+                    const downloadButton = document.createElement("button");
+                    downloadButton.textContent = "Download";
+                    downloadButton.addEventListener("click", function() {
+                        const a = document.createElement("a");
+                        a.href = file.blobUrl;
+                        a.download = file.name;
+                        a.click();
+                    });
+                    fileElement.appendChild(downloadButton);
 
-    // Event listener for login button click
-    document.getElementById("login-button").addEventListener("click", function() {
-        const password = passwordInput.value;
-        // Check if password is correct (5084 in this case)
-        if (password === "5084") {
-            alert("Login successful!"); // Show alert for successful login
-            adminLogin.style.display = "none"; // Hide admin login area
-            uploadSection.style.display = "block"; // Show upload section
-            document.querySelector(".delete-content").style.display = "block"; // Show delete content section
-        } else {
-            alert("Incorrect password. Please try again."); // Show alert for incorrect password
-            passwordInput.value = ""; // Clear password input field
-        }
-    });
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Delete";
+                    deleteButton.classList.add("delete-button");
+                    deleteButton.addEventListener("click", function() {
+                        filesToShow.splice(index, 1);
+                        localStorage.setItem("files", JSON.stringify(filesToShow));
+                        displayFiles(filesToShow);
+                    });
+                    if (isAdmin) {
+                        deleteButton.style.display = "block";
+                    }
+                    fileElement.appendChild(deleteButton);
 
-    // Event listener for upload button click
-    uploadButton.addEventListener("click", function() {
-        const file = fileInput.files[0];
-        const fileName = file.name;
-        const classSelected = classSelect.value;
-        const subjectSelected = subjectSelect.value;
-        const chapterSelected = chapterSelect.value;
-        const newFile = {
-            name: `${classSelected}_${subjectSelected}_${chapterSelected}_${fileName}`,
-            blob: file
-        };
-        files.push(newFile);
-        localStorage.setItem("files", JSON.stringify(files)); // Save files to localStorage
-        displayFiles(files);
-        alert("File uploaded successfully!");
-    });
-
-    // Event listener for class select change
-    classSelect.addEventListener("change", function() {
-        const classSelected = classSelect.value;
-        // Clear previous options
-        subjectSelect.innerHTML = "<option value=''>Select Subject</option>";
-        chapterSelect.innerHTML = "<option value=''>Select Chapter</option>";
-        // Add subjects based on class selection
-        if (classSelected >= "1" && classSelected <= "5") {
-            addSubjects(["Science", "Math"]);
-        } else if (classSelected >= "6" && classSelected <= "10") {
-            addSubjects(["Physics", "Chemistry", "Biology", "Math"]);
-        }
-        // Add more conditions for other classes as needed
-    });
-
-    // Function to add subject options
-    function addSubjects(subjects) {
-        subjects.forEach(subject => {
-            const option = document.createElement("option");
-            option.value = subject;
-            option.textContent = subject;
-            subjectSelect.appendChild(option);
-        });
-    }
-
-    // Event listener for subject select change
-    subjectSelect.addEventListener("change", function() {
-        // Clear previous options
-        chapterSelect.innerHTML = "<option value=''>Select Chapter</option>";
-        const subjectSelected = subjectSelect.value;
-        // Add chapters based on subject selection
-        if (subjectSelected === "Math") {
-            addChapters(["Chapter 1", "Chapter 2", "Chapter 3"]); // Add more chapters as needed
-        } else if (subjectSelected === "Science") {
-            addChapters(["Chapter 1", "Chapter 2", "Chapter 3"]); // Add more chapters as needed
-        }
-        // Add more conditions for other subjects as needed
-    });
-
-    // Function to add chapter options
-    function addChapters(chapters) {
-        chapters.forEach(chapter => {
-            const option = document.createElement("option");
-            option.value = chapter;
-            option.textContent = chapter;
-            chapterSelect.appendChild(option);
-        });
-    }
-
-    // Function to filter files based on student filters
-    function filterFiles() {
-        const classFilter = filterClassSelect.value;
-        const subjectFilter = filterSubjectSelect.value;
-        const chapterFilter = filterChapterSelect.value;
-
-        const filteredFiles = files.filter(file => {
-            if (classFilter !== "all" && file.name.indexOf(`_${classFilter}_`) === -1) {
-                return false;
+                    fileContainer.appendChild(fileElement);
+                });
             }
-            if (subjectFilter !== "all" && file.name.indexOf(`_${subjectFilter}_`) === -1) {
-                return false;
+
+            let files = JSON.parse(localStorage.getItem("files")) || [];
+
+            displayFiles(files);
+
+            // Show admin login on button click
+            adminButton.addEventListener("click", function() {
+                adminLogin.style.display = adminLogin.style.display === "none" ? "block" : "none";
+            });
+
+            // Handle admin login
+            document.getElementById("login-button").addEventListener("click", function() {
+                const password = passwordInput.value;
+                if (password === "nkdadmin") {
+                    isAdmin = true;
+                    uploadSection.style.display = "block";
+                    displayFiles(files);
+                } else {
+                    alert("Incorrect password!");
+                }
+            });
+
+            // Handle file upload
+            uploadButton.addEventListener("click", function() {
+                const file = fileInput.files[0];
+                const selectedClass = classSelect.value;
+                const selectedSubject = subjectSelect.value;
+                const selectedChapter = chapterSelect.value;
+
+                if (file && selectedClass && selectedSubject && selectedChapter) {
+                    const newFile = {
+                        name: file.name,
+                        class: selectedClass,
+                        subject: selectedSubject,
+                        chapter: selectedChapter,
+                        blobUrl: URL.createObjectURL(file)
+                    };
+                    files.push(newFile);
+                    localStorage.setItem("files", JSON.stringify(files));
+                    displayFiles(files);
+                    alert("File uploaded successfully!");
+                } else {
+                    alert("Please select a file and all other options.");
+                }
+            });
+
+            // Filter files based on selection
+            function filterFiles() {
+                const classFilter = filterClassSelect.value;
+                const subjectFilter = filterSubjectSelect.value;
+                const chapterFilter = filterChapterSelect.value;
+
+                let filteredFiles = files;
+                if (classFilter !== "all") {
+                    filteredFiles = filteredFiles.filter(file => file.class === classFilter);
+                }
+                if (subjectFilter !== "all") {
+                    filteredFiles = filteredFiles.filter(file => file.subject === subjectFilter);
+                }
+                if (chapterFilter !== "all") {
+                    filteredFiles = filteredFiles.filter(file => file.chapter === chapterFilter);
+                }
+                displayFiles(filteredFiles);
             }
-            if (chapterFilter !== "all" && file.name.indexOf(`_${chapterFilter}_`) === -1) {
-                return false;
-            }
-            return true;
+
+            filterClassSelect.addEventListener("change", filterFiles);
+            filterSubjectSelect.addEventListener("change", filterFiles);
+            filterChapterSelect.addEventListener("change", filterFiles);
+
+            // Populate subjects and chapters based on class selection
+            const subjects = {
+                "1": ["Math", "Science"],
+                "2": ["Math", "Science"],
+                "3": ["Math", "Science"],
+                "4": ["Math", "Science"],
+                "5": ["Math", "Science"],
+                "6": ["Math", "Science"],
+                "7": ["Math", "Science"],
+                "8": ["Math", "Science"],
+                "9": ["Math", "Science"],
+                "10": ["Math", "Science"],
+                "11": ["Physics", "Chemistry", "Maths"],
+                "12": ["Physics", "Chemistry", "Maths"]
+            };
+
+            classSelect.addEventListener("change", function() {
+                const selectedClass = classSelect.value;
+                const relevantSubjects = subjects[selectedClass] || [];
+                subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+                relevantSubjects.forEach(subject => {
+                    const option = document.createElement("option");
+                    option.value = subject;
+                    option.textContent = subject;
+                    subjectSelect.appendChild(option);
+                });
+                chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+            });
+
+            subjectSelect.addEventListener("change", function() {
+                const selectedSubject = subjectSelect.value;
+                if (selectedSubject) {
+                    const chapters = ["Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4"];
+                    chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+                    chapters.forEach(chapter => {
+                        const option = document.createElement("option");
+                        option.value = chapter;
+                        option.textContent = chapter;
+                        chapterSelect.appendChild(option);
+                    });
+                }
+            });
+
+            // Populate filter subjects and chapters based on class selection
+            filterClassSelect.addEventListener("change", function() {
+                const selectedClass = filterClassSelect.value;
+                const relevantSubjects = subjects[selectedClass] || [];
+                filterSubjectSelect.innerHTML = '<option value="all">All</option>';
+                relevantSubjects.forEach(subject => {
+                    const option = document.createElement("option");
+                    option.value = subject;
+                    option.textContent = subject;
+                    filterSubjectSelect.appendChild(option);
+                });
+                filterChapterSelect.innerHTML = '<option value="all">All</option>';
+            });
+
+            filterSubjectSelect.addEventListener("change", function() {
+                const selectedSubject = filterSubjectSelect.value;
+                if (selectedSubject !== "all") {
+                    const chapters = ["Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4"];
+                    filterChapterSelect.innerHTML = '<option value="all">All</option>';
+                    chapters.forEach(chapter => {
+                        const option = document.createElement("option");
+                        option.value = chapter;
+                        option.textContent = chapter;
+                        filterChapterSelect.appendChild(option);
+                    });
+                }
+            });
         });
-
-        displayFiles(filteredFiles);
-    }
-
-    // Display all files initially
-    displayFiles(files);
-
-    // Event listener for filter change
-    filterClassSelect.addEventListener("change", filterFiles);
-    filterSubjectSelect.addEventListener("change", filterFiles);
-    filterChapterSelect.addEventListener("change", filterFiles);
-});
     </script>
 </body>
 </html>
